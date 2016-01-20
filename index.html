@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <style>
+            #blocker {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+			}
+			#instructions {
+                width: 100%;
+                height: 100%;
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+				-webkit-box-orient: vertical;
+				-moz-box-orient: vertical;
+				box-orient: vertical;
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+				color: #ffffff;
+				text-align: center;
+			}
+            #help {
+                width: 100%;
+                height: 100%;
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+				-webkit-box-orient: vertical;
+				-moz-box-orient: vertical;
+				box-orient: vertical;
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+				color: #ffffff;
+				text-align: center;
+            }
+            #controls {
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+				-webkit-box-orient: vertical;
+				-moz-box-orient: vertical;
+				box-orient: vertical;
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+				color: #ffffff;
+				text-align: left;
+			}
+            #red {
+                color: #550000;
+                background: #000000;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #550000;
+                cursor: pointer;
+                margin-bottom:5px;
+                margin-top:5px;
+            }
+            #red:hover {
+                color: #000000;
+                background: #550000;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #000000;
+            }
+            #blue {
+                color: #000055;
+                background: #000000;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #000055;
+                cursor: pointer;
+            }
+            #blue:hover {
+                color: #000000;
+                background: #000055;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #000000;
+            }
+            #yellow {
+                color: #555500;
+                background: #000000;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #555500;
+                cursor: pointer;
+            }
+            #yellow:hover {
+                color: #000000;
+                background: #555500;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #000000;
+            }
+            #green {
+                color: #005500;
+                background: #000000;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #005500;
+                cursor: pointer;
+            }
+            #green:hover {
+                color: #000000;
+                background: #005500;
+                font-weight: bold;
+                font-size: 150%;
+                border: 1px solid #000000;
+            }
+        </style>
+        
+		<script src="libs/three.js"></script>
+        <script src="libs/threex.keyboardstate.js"></script>
+        <script src="libs/ColladaLoader.js"></script>
+        <script src="libs/howler.min.js"></script>
+        <script src="libs/cannon.min.js"></script>
+        <script src="libs/CannonDebugRenderer.js"></script>
+        <script src="libs/GPUParticleSystem.js"></script>
+        <script src="libs/socket.io.js"></script>
+        <script src="libs/UniformsUtils.js"></script>
+        <script src="js/Sounds.js"></script>
+        <script src="js/Weapons.js"></script>
+        <script src="js/Ship.js"></script>
+        <script src="js/NetworkShips.js"></script>
+        <script src="js/NetworkProjectiles.js"></script>
+        <script src="js/Client.js"></script>
+        <script src="js/Skybox.js"></script>
+        <script src="js/Particles.js"></script>
+        <script src="js/HUD.js"></script>
+        <script src="js/SpaceStation.js"></script>
+        <script src="libs/stats.js"></script>
+	</head>
+
+	<body>
+        <div id="Game" style="position: absolute; margin: 0px; overflow: hidden; width: 100%; height: 100%; left:0px; top:0px;"></div>
+        <div id="blocker">
+			<div id="instructions">
+				<span style="font-size:30px">Select your team<br></span>
+                <button id="red" onclick="spawn('red')">Red</button>
+                <button id="blue" onclick="spawn('blue')">Blue</button>
+                <button id="yellow" onclick="spawn('yellow')">Yellow</button>
+                <button id="green" onclick="spawn('green')">Green</button><br>
+                <span style="font-size:30px">or click anywhere else to spectate</span><br><br>
+                <div id="controls">
+                    <table border="1">
+                        <tr>
+                            <td><b>Controls:</b></td>
+                        </tr>
+                        <tr>
+                            <td>Help: ESC</td>
+                            <td>Fire: Left Click</td>
+                        </tr>
+                        <tr>
+                            <td>Forward: W</td>
+                            <td>Backward: S</td>
+                        </tr>
+                        <tr>
+                            <td>Turn Left: A</td>
+                            <td>Turn Right: D<br>
+                        </tr>
+                        <tr>
+                            <td>Strafe Left: Q</td>
+                            <td>Strafe Right: E</td>
+                        </tr>
+                        <tr>
+                            <td>Roll: Mouse X</td>
+                            <td>Pitch: Mouse Y</td>
+                        </tr>
+                        <tr>
+                            <td>Vertical Thrust Up: Z</td>
+                            <td>Vertical Thrust Down: X</td>
+                        </tr>
+                    </table>
+                </div>
+			</div>
+		</div>
+        
+        <script src="js/PointerLock.js"></script>
+
+		<script>
+			var scene;
+			var camera;
+            var hudcam;
+			var renderer;
+            var loader;
+            var world;
+            var cannonDebugRenderer;
+			function init()
+			{
+                keyboard = new THREEx.KeyboardState();
+                loader = new THREE.ColladaLoader();
+                world = new CANNON.World();
+                world.gravity.set(0, 0, 0);
+				scene = new THREE.Scene();
+                cannonDebugRenderer = new THREE.CannonDebugRenderer(scene, world);
+
+                camera = new THREE.PerspectiveCamera(67, window.innerWidth / window.innerHeight, 0.1, 3700);
+                camera.up = new THREE.Vector3(0, 0, 1);
+                camera.position.set(0, 0, 1800);
+				camera.lookAt(scene.position);
+                
+                /*hudcam = new THREE.OrthographicCamera(-300, 300, 17, -17, -1, 3);
+                hudcam.lookAt(new THREE.Vector3(0, -1, 0));
+                scene.add(hudcam);*/
+				
+				renderer = new THREE.WebGLRenderer();
+				renderer.setClearColor(0x000000, 1.0);
+                renderer.autoClear = false;
+				renderer.setSize(window.innerWidth, window.innerHeight);
+                document.getElementById("Game").appendChild(renderer.domElement);
+                
+                hemispherelight = new THREE.HemisphereLight(0xffffff, 1);
+                scene.add(hemispherelight);
+                
+                skybox.addsky();
+
+                particles.addsystem();
+                spacestation.addredstation();
+                spacestation.addbluestation();
+                spacestation.addgreenstation();
+                spacestation.addyellowstation();
+                
+				render();
+			}
+
+            var lastTime;
+            var fixedTimeStep = 1.0 / 60.0;
+            var maxSubSteps = 8;
+			function render(time)
+            {
+                if(lastTime !== undefined)
+                {
+                    var dt = (time - lastTime) / 1000;
+                    world.step(fixedTimeStep, dt, maxSubSteps);
+                    projectiles.removebullets();
+                    networkship.removeshipbodies();
+                    networkprojectiles.removeprojectiles();
+                    
+                    particles.spawn((time - lastTime) / 1000);
+                }
+                
+                if(typeof(projectiles) != "undefined")
+                    projectiles.update(time);
+                if(typeof(ship) != "undefined")
+                    ship.update(time);
+                if(typeof(skybox) != "undefined")
+                    skybox.update(ship.getPosition());
+                if(hud !== undefined)
+                    hud.update();
+                if(networkprojectiles !== undefined)
+                    networkprojectiles.update(time);
+
+                lastTime = time;
+                
+                requestAnimationFrame(render);
+                
+                //cannonDebugRenderer.update();
+                renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+                renderer.clear();
+                renderer.render(scene, camera);
+                renderer.render(hud.getscene(), hud.getcamera());
+
+                /*renderer.setViewport(0, 0, window.innerWidth / 3, window.innerWidth / 3);
+                renderer.render(scene, hudcam);*/
+			}
+            
+            function spawn(color)
+            {
+                ship.addship(color);
+                client.addship(color);
+            }
+
+            function fixedupdate()
+            {
+                if(ship !== undefined)
+                    ship.sendposition();
+            }
+            window.setInterval(fixedupdate, 16.66666);
+			
+			function onResize() 
+			{
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+                hud.updatedimensions();
+			}
+            
+            function onmousedown()
+            {
+                ship.setfiringstatus();
+            }
+            
+            function onmouseup()
+            {
+                ship.setfiringstatus();
+            }
+            
+            function onmousemove(event)
+            {
+                ship.mousecontrol(event);
+            }
+			
+			window.onload = init;
+			window.addEventListener('resize', onResize, false);
+            window.addEventListener('mousedown', onmousedown, false);
+            window.addEventListener('mouseup', onmouseup, false);
+            window.addEventListener('mousemove', onmousemove, false);
+		</script>
+	</body>
+</html>
