@@ -1,5 +1,8 @@
 # Space Game
 
+The game can be played here: spacegame.azurewebsites.net
+*Note: the server is down, so there will be no enemy ships to play against
+
 This was a project done using Three.js to create a 3D multiplayer space combat game. Three.js was used to handle most of the game, including rendering, model loading, texture loading, and particle systems. Cannon.js was used to handle physics, which includes ship and projectile collisions. Socket.IO was used to handle the multiplayer part of the game.
 
 - [Three.js](#three.js)
